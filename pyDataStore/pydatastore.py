@@ -9,10 +9,12 @@ from Crypto.Random import get_random_bytes
 from enum import Enum
 
 
-class pyDataStore:
+class DataStore:
+    """ Persistent and portable serialized data store. """
+
     __author__ = "kakaiba-talaga"
-    __version__ = "1.0.0"
-    __license__ = "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007"
+    __version__ = "1.0.1"
+    __license__ = "GPL-3.0-or-later"
     __url__ = "https://github.com/kakaiba-talaga/pyDataStore"
 
     # Default file data store.
@@ -243,6 +245,16 @@ class pyDataStore:
 
 
 class Cipher(Enum):
+    """
+    Cipher enumerations.
+    
+    `Default` - `Base64`
+
+    `Base64` - Base64 encoding.
+
+    `AES` - AES encoding.
+    """
+
     Default = "base64"
     Base64 = "base64"
     AES = "aes"

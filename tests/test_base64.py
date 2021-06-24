@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
 
-import os, sys
-
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.dirname(CURRENT_DIR))
-
-from datastore import Cipher, pyDataStore
+from pyDataStore import Cipher, DataStore
 
 
 objDict = {"object": "test_datastore", "data": {"user": "dummy-user", "pass": "123qwe456asd789zxc"}}
@@ -14,10 +9,10 @@ print(f"Raw: {objDict}")
 
 # Create an instance that will store the data in a file named base64.store.
 # Default encoding is set to Base64.
-ds64 = pyDataStore(fileDataStore="base64.store", cipher=Cipher.Base64)
+ds64 = DataStore(fileDataStore="base64.store", cipher=Cipher.Base64)
 
 # This is the default where the data will be stored in a file named data.store and will be encoded in Base64.
-#ds64 = pyDataStore()
+# ds64 = DataStore()
 
 # Dump or store the dictionary object.
 ds64.dump(objDict)

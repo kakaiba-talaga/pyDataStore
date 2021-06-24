@@ -8,7 +8,7 @@ To secure the *data*, it is using the `base64` package when encoding it in *Base
 
 ## Requirements
 
-This requires **Python** >= `3.5` but >= `3.8` is preferred.
+This requires **Python** `>=3.5`, `<3.10`.
 
 ### Python Packages
 
@@ -16,11 +16,17 @@ This requires **Python** >= `3.5` but >= `3.8` is preferred.
 
 ## Installation
 
-Install the requirements first by running:
+- Install the package in *Development* mode:
 
-```bash
-pip install -r requirements.txt
-```
+    ```bash
+    pip install -e .
+    ```
+
+- Install the package through PyPI:
+
+    ```bash
+    pip install pydatastore
+    ```
 
 ## Usage
 
@@ -33,7 +39,7 @@ As this will be using **Python 3**, we have to set the *shebang* to the appropri
 To use `pyDataStore`, we have to import it first.
 
 ```python
-from datastore import Cipher, pyDataStore
+from pyDataStore import Cipher, DataStore
 ```
 
 Then, we can use this sample `dict` *object*.
@@ -114,3 +120,53 @@ Exception: This dict object has an invalid format.
 ## Test Scripts
 
 You can use the test scripts under [./test](tests/readme.md).
+
+---
+
+## Packaging
+
+To be able to make the project installable from a Package Index like *PyPI*, we need to create a Distribution *(AKA "Package")* for it.
+
+Before you can build wheels and sdists for the project, we need to install the build package:
+
+```bash
+pip install build
+```
+
+### Distribution
+
+Minimally, a source distribution should be created.
+
+```bash
+python3 -m build --sdist
+```
+
+A *"source distribution"* is unbuilt *(it’s not a Built Distribution)*, and requires a build step when installed by `pip`. Even if the distribution is pure Python *(contains no extensions)*, it still involves a build step to build out the installation metadata from `setup.py`.
+
+### Wheels
+
+We should also create a wheel for the project. A *wheel* is a built package that can be installed without needing to go through the "build" process. Installing *wheels* is substantially faster for the end-user compared to installing from a source distribution.
+
+```bash
+python3 -m build --wheel
+```
+
+The *wheel* package will detect that the code is pure Python and build a *wheel* that is named such that it is usable on any Python 3 installation.
+
+## Uploading to PyPI
+
+When we ran the command to create our distribution, a new directory `./dist` was created under the project’s root directory. That’s where we'll find our distribution file(s) to upload.
+
+**NOTE:**
+
+*These files are only created when we execute the command to create the distribution. This means that **ANY** change to the source files or configurations in `setup.py` file, these files are needed to be rebuilt again before we can distribute the changes to PyPI.*
+
+Before trying to upload the distribution, check to see if the brief / long descriptions provided in `setup.py` are valid. This can be done by running a `twine` check on package files:
+
+```bash
+pip install twine
+```
+
+```bash
+twine check dist/*
+```

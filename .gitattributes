@@ -1,0 +1,7 @@
+# Set the default behavior in case core.autocrlf is not set.
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted to native line endings on checkout.
+*.md text eol=lf
+*.py text eol=lf
+*.txt text eol=lf

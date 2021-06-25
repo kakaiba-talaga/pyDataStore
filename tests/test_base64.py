@@ -17,6 +17,8 @@ ds64 = DataStore(fileDataStore="base64.store", cipher=Cipher.Base64)
 # Dump or store the dictionary object.
 ds64.dump(objDict)
 
+# At this point, the objDict dict object is already encoded.
+
 # Based64 Encoded.
 print(f"Base64: {objDict}")
 

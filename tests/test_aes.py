@@ -14,6 +14,8 @@ dsAES = DataStore(fileDataStore="aes.store", cipher=Cipher.AES, aesKey="SPECIFY_
 # Dump or store the dictionary object.
 dsAES.dump(objDict)
 
+# At this point, the objDict dict object is already encoded.
+
 # AES Encoded.
 print(f"AES: {objDict}")
 

@@ -13,7 +13,7 @@ class DataStore:
     """ Persistent and portable serialized data store. """
 
     __author__ = "kakaiba-talaga"
-    __version__ = "1.0.2"
+    __version__ = "1.0.4"
     __license__ = "GPL-3.0-or-later"
     __url__ = "https://github.com/kakaiba-talaga/pyDataStore"
 
@@ -255,6 +255,6 @@ class Cipher(Enum):
     `AES` - AES encoding.
     """
 
-    Default = "base64"
     Base64 = "base64"
     AES = "aes"
+    Default = Base64

@@ -14,7 +14,7 @@ def read(fileName):
 
 setup(
     name="pyDataStore",
-    version="1.0.5",
+    version="1.0.6",
     description="Persistent and portable serialized data store.",
     url="https://github.com/kakaiba-talaga/pyDataStore",
     author="kakaiba™",
@@ -23,7 +23,7 @@ setup(
     keywords="datastore, data, store, portable, storage, utilities",
     package_dir={"":"src"},
     packages=find_packages(where="src"),
-    long_description=read("readme_pypi.md"),
+    long_description=read("readme.md"),
     long_description_content_type="text/markdown",
     classifiers=[
         "Development Status :: 5 - Production/Stable",

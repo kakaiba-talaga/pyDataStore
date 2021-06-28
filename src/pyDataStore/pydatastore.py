@@ -13,7 +13,7 @@ class DataStore:
     """ Persistent and portable serialized data store. """
 
     __author__ = "kakaiba-talaga"
-    __version__ = "1.0.5"
+    __version__ = "1.0.6"
     __license__ = "GPL-3.0-or-later"
     __url__ = "https://github.com/kakaiba-talaga/pyDataStore"
 

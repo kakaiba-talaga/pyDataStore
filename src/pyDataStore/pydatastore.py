@@ -13,7 +13,7 @@ class DataStore:
     """ Persistent and portable serialized data store. """
 
     __author__ = "kakaiba-talaga"
-    __version__ = "1.0.4"
+    __version__ = "1.0.5"
     __license__ = "GPL-3.0-or-later"
     __url__ = "https://github.com/kakaiba-talaga/pyDataStore"
 
@@ -37,7 +37,7 @@ class DataStore:
 
         `fileDataStore` = Location of the file to use as data store. Default is `data.store` or `./data.store`.
 
-        `cipher` = Instance of the `Cipher` Enum. Either `Cipher.Base64` (default) or `Cipher.AES`
+        `cipher` = Instance of the `Cipher` Enum. Either `Cipher.Default`, `Cipher.Base64` (default), or `Cipher.AES`
 
         `aesKey` = A string that will be used as the secret key in encoding. Required only be used when `cipher` is set to `Cipher.AES`.
 
@@ -52,9 +52,12 @@ class DataStore:
         # This will only be used if `cipher` is set to Cipher.AES.
         self.cipher = Cipher.Default if (cipher in [None, ""] or not isinstance(cipher, Cipher)) else cipher
 
+        if (aesKey in [None, ""] and cipher == Cipher.AES):
+            raise Exception("The AES Key is required when Cipher is set to AES.")
+
         # AES supports multiple key sizes: 16 (AES128), 24 (AES192), or 32 (AES256).
         # This will output a key size of 32 bytes.
-        self.aesKey = hashlib.sha256(aesKey.encode("utf-8")).digest() if (cipher != None and isinstance(cipher, Cipher) and cipher == Cipher.AES and aesKey not in [None, ""]) else ""
+        self.aesKey = hashlib.sha256(aesKey.encode("utf-8")).digest() if cipher == Cipher.AES else ""
 
     def dump(self, inObjDict: dict):
         """
@@ -165,6 +168,7 @@ class DataStore:
 
     def __encode_aes(self, raw : str):
         pad = lambda s: s + ((self.aesBlockSize - len(s)) % self.aesBlockSize) * chr((self.aesBlockSize - len(s)) % self.aesBlockSize)
+        raw = raw.decode("utf-8") if type(raw) is bytes else raw
         rawBase64Encoded = self.__encode_base64(pad(raw))
         iv = get_random_bytes(self.aesBlockSize)
         cipher = AES.new(key=self.aesKey, mode=self.aesMode, iv=iv)
@@ -198,22 +202,25 @@ class DataStore:
 
         returnObj = None
 
-        if (Path.isfile(self.fileDataStore)):
-            dbFile = open(self.fileDataStore, "rb")
+        try:
+            if (Path.isfile(self.fileDataStore)):
+                dbFile = open(self.fileDataStore, "rb")
 
-            while True:
-                try:
-                    lineObj = pickle.load(dbFile)
+                while True:
+                    try:
+                        lineObj = pickle.load(dbFile)
 
-                    if (lineObj["object"] == objName):
-                        returnObj = self.__iterate(lineObj, False)
+                        if (lineObj["object"] == objName):
+                            returnObj = self.__iterate(lineObj, False)
+                            break
+                    except EOFError:
                         break
-                except EOFError:
-                    break
 
-            dbFile.close()
-        else:
-            raise Exception(f"The specified data store, {self.fileDataStore}, cannot be found.")
+                dbFile.close()
+            else:
+                raise Exception(f"The specified data store, {self.fileDataStore}, cannot be found.")
+        except Exception as error:
+            raise Exception(error)
 
         return returnObj
 

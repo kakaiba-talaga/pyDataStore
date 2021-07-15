@@ -12,9 +12,10 @@ def read(fileName):
 
     return fileContents
 
+
 setup(
     name="pyDataStore",
-    version="1.0.6",
+    version=read("src/pyDataStore/VERSION"),
     description="Persistent and portable serialized data store.",
     url="https://github.com/kakaiba-talaga/pyDataStore",
     author="kakaiba™",
@@ -29,7 +30,6 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
@@ -37,7 +37,7 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Utilities",
     ],
-    python_requires=">=3.5, <3.10",
+    python_requires=">=3.6, <3.10",
     install_requires=[
         'pycryptodome >= 3.10.1',
     ],

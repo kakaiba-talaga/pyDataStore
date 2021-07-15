@@ -2,20 +2,17 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import os
 import os.path as Path
 import pickle
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 from enum import Enum
+from stat import S_IREAD
 
 
 class DataStore:
     """ Persistent and portable serialized data store. """
-
-    __author__ = "kakaiba-talaga"
-    __version__ = "1.0.6"
-    __license__ = "GPL-3.0-or-later"
-    __url__ = "https://github.com/kakaiba-talaga/pyDataStore"
 
     # Default file data store.
     fileDataStore = "data.store"
@@ -35,11 +32,11 @@ class DataStore:
 
         A Python `dict` object that has been `dump`-ed can be `load`-ed in the future. The object can be encoded using `Base64` or `AES`.
 
-        `fileDataStore` = Location of the file to use as data store. Default is `data.store` or `./data.store`.
+        `fileDataStore`: Location of the file to use as data store. Default is `data.store` or `./data.store`.
 
-        `cipher` = Instance of the `Cipher` Enum. Either `Cipher.Default`, `Cipher.Base64` (default), or `Cipher.AES`
+        `cipher`: Instance of the `Cipher` Enum. Either `Cipher.Default`, `Cipher.Base64` (default), or `Cipher.AES`
 
-        `aesKey` = A string that will be used as the secret key in encoding. Required only be used when `cipher` is set to `Cipher.AES`.
+        `aesKey`: A string that will be used as the secret key in encoding. Required only be used when `cipher` is set to `Cipher.AES`.
 
         ---
 
@@ -59,9 +56,15 @@ class DataStore:
         # This will output a key size of 32 bytes.
         self.aesKey = hashlib.sha256(aesKey.encode("utf-8")).digest() if cipher == Cipher.AES else ""
 
-    def dump(self, inObjDict: dict):
+    def dump(self, inObjDict: dict, makeReadOnly: bool = False):
         """
         This will store the `dict` object in the data store. If the object already exists, it will be overwritten.
+
+        `inObjDict`: The object to be serialized. There is a format to follow. See details further below.
+
+        `makeReadOnly`: Make the data store file read-only after creating it.
+
+        ---
 
         `inObjDict` should be a `dict` following this format:
 
@@ -119,8 +122,20 @@ class DataStore:
                 pickle.dump(inObjDict, dbFile, self.protocol)
 
             dbFile.close()
+
+            if (makeReadOnly):
+                os.chmod(self.fileDataStore, S_IREAD)
         except Exception as error:
             raise Exception(error)
+
+    def dumps(self, inObjDicts: list, makeReadOnly: bool = False):
+        """ Similar to `dump()` but supports multiple `dict` objects to be serialized which will be passed in a `List`. """
+
+        listLen = len(inObjDicts)-1
+
+        for inObjDict in inObjDicts:
+            makeReadOnly = True if inObjDicts.index(inObjDict) == listLen and makeReadOnly else False
+            self.dump(inObjDict, makeReadOnly)
 
     def __iterate(self, objDict: dict, encode: bool = True):
         dataDict = objDict["data"]
@@ -135,7 +150,7 @@ class DataStore:
         """
         Validate if the `objDict` is following the correct format.
         
-        `objDict` should be a `dict` following this format:
+        `objDict`: This should be a `dict` following this format:
 
         ```
             {
@@ -238,17 +253,20 @@ class DataStore:
 
         return returnStatus
 
-    def version(self):
-        return self.__version__
+    def __read(fileName):
+        fileContents = ""
+        fileNamePath = Path.join(Path.dirname(__file__), fileName)
 
-    def author(self):
-        return self.__author__
+        if (Path.isfile(fileNamePath)):
+            with open(fileNamePath, encoding="utf-8") as fileIn:
+                fileContents = fileIn.read()
 
-    def license(self):
-        return self.__license__
+        return fileContents
 
-    def github_url(self):
-        return self.__url__
+    __version__ = __read("VERSION")
+    __author__ = "kakaiba-talaga"
+    __license__ = "GPL-3.0-or-later"
+    __url__ = "https://github.com/kakaiba-talaga/pyDataStore"
 
 
 class Cipher(Enum):

@@ -6,9 +6,25 @@ A Python `dict` *object* that has been `dump`-ed can be `load`-ed or retrieved i
 
 To secure the *data*, it is using the `base64` package when encoding it in *Base64*, which is the default encoding, and `pycryptodome` package when encoding it in *AES*. Then, `pickle` to serialize the `dict` object.
 
+- [pyDataStore](#pydatastore)
+  - [Requirements](#requirements)
+    - [Python Packages](#python-packages)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Base64 Encoding](#base64-encoding)
+    - [AES Encoding](#aes-encoding)
+  - [Test Scripts](#test-scripts)
+  - [Packaging](#packaging)
+    - [Build](#build)
+      - [Distribution](#distribution)
+      - [Wheels](#wheels)
+  - [Uploading to PyPI](#uploading-to-pypi)
+  - [Contribute](#contribute)
+  - [License](#license)
+
 ## Requirements
 
-This requires **Python** `>=3.5`, `<3.10`.
+This requires **Python** `>=3.6`, `<3.10`.
 
 ### Python Packages
 
@@ -26,6 +42,10 @@ This requires **Python** `>=3.5`, `<3.10`.
 
     ```bash
     pip install pyDataStore
+    ```
+
+    ```bash
+    python3 -m pip install pyDataStore
     ```
 
 ## Usage
@@ -137,7 +157,21 @@ Before you can build *wheels* and *source distribution* for the project, we need
 pip install build
 ```
 
-### Distribution
+```bash
+python3 -m pip install build
+```
+
+### Build
+
+Building this project will produce 2 files. One file for [source distribution](#distribution) and the other is the [wheel package](#wheels) or _built package_. Both can be used by `pip` for the installation.
+
+To build this project:
+
+```bash
+python3 -m build
+```
+
+#### Distribution
 
 Minimally, a *source distribution* should be created.
 
@@ -145,9 +179,9 @@ Minimally, a *source distribution* should be created.
 python3 -m build --sdist
 ```
 
-A *source distribution* is unbuilt *(it’s not a Built Distribution)* and requires a build step when installed by `pip`. Even if the distribution is pure Python *(contains no extensions)*, it still involves a build step to build out the installation metadata from `setup.py`.
+A *source distribution* is unbuilt and requires a build step when installed by `pip`. Even if the distribution is pure Python *(contains no extensions)*, it still involves a build step to build out the installation metadata from `setup.py`.
 
-### Wheels
+#### Wheels
 
 We should also create a *wheel* for the project. A *wheel* is a built package that can be installed without needing to go through the build process. Installing *wheels* are substantially faster for the end-user compared to installing from a source distribution.
 

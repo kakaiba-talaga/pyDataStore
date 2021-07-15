@@ -6,9 +6,21 @@ A Python `dict` *object* that has been `dump`-ed can be `load`-ed or retrieved i
 
 To secure the *data*, it is using the `base64` package when encoding it in *Base64*, which is the default encoding, and `pycryptodome` package when encoding it in *AES*. Then, `pickle` to serialize the `dict` object.
 
+The developer version of this ReadMe.md is available [here](https://github.com/kakaiba-talaga/pyDataStore/blob/main/readme_github.md).
+
+- [pyDataStore](#pydatastore)
+  - [Requirements](#requirements)
+    - [Python Packages](#python-packages)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Base64 Encoding](#base64-encoding)
+    - [AES Encoding](#aes-encoding)
+  - [Contribute](#contribute)
+  - [License](#license)
+
 ## Requirements
 
-This requires **Python** `>=3.5`, `<3.10`.
+This requires **Python** `>=3.6`, `<3.10`.
 
 ### Python Packages
 
@@ -20,6 +32,10 @@ Install the package through PyPI:
 
 ```bash
 pip install pyDataStore
+```
+
+```bash
+python3 -m pip install pyDataStore
 ```
 
 ## Usage
